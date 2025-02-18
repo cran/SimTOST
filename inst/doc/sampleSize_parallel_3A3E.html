@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Bioequivalence Tests for Parallel Trial Designs: 3 Arms, 3 Endpoints</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>$(document).ready(function(){
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
+});
+</script>
+<style type="text/css">
+.lightable-minimal {
+border-collapse: separate;
+border-spacing: 16px 1px;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-minimal td {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal th {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal thead tr:last-child th {
+border-bottom: 2px solid #00000050;
+empty-cells: hide;
+}
+.lightable-minimal tbody tr:first-child td {
+padding-top: 0.5em;
+}
+.lightable-minimal.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-minimal.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic {
+border-top: 0.16em solid #111111;
+border-bottom: 0.16em solid #111111;
+width: 100%;
+margin-bottom: 10px;
+margin: 10px 5px;
+}
+.lightable-classic tfoot tr td {
+border: 0;
+}
+.lightable-classic tfoot tr:first-child td {
+border-top: 0.14em solid #111111;
+}
+.lightable-classic caption {
+color: #222222;
+}
+.lightable-classic td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic thead tr:last-child th {
+border-bottom: 0.10em solid #111111;
+}
+.lightable-classic.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic-2 {
+border-top: 3px double #111111;
+border-bottom: 3px double #111111;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-classic-2 tfoot tr td {
+border: 0;
+}
+.lightable-classic-2 tfoot tr:first-child td {
+border-top: 3px double #111111;
+}
+.lightable-classic-2 caption {
+color: #222222;
+}
+.lightable-classic-2 td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic-2 th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic-2 tbody tr:last-child td {
+border-bottom: 3px double #111111;
+}
+.lightable-classic-2 thead tr:last-child th {
+border-bottom: 1px solid #111111;
+}
+.lightable-classic-2.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic-2.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #EEE;
+border-collapse: collapse;
+margin-bottom: 10px;
+}
+.lightable-material tfoot tr td {
+border: 0;
+}
+.lightable-material tfoot tr:first-child td {
+border-top: 1px solid #EEE;
+}
+.lightable-material th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+}
+.lightable-material td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+border-top: 1px solid #eeeeee;
+}
+.lightable-material.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #ddd;
+}
+.lightable-material-dark {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #FFFFFF12;
+border-collapse: collapse;
+margin-bottom: 10px;
+background-color: #363640;
+}
+.lightable-material-dark tfoot tr td {
+border: 0;
+}
+.lightable-material-dark tfoot tr:first-child td {
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF60;
+}
+.lightable-material-dark td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF;
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark.lightable-hover tbody tr:hover {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody tr:nth-child(even) {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material-dark.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #FFFFFF12;
+}
+.lightable-paper {
+width: 100%;
+margin-bottom: 10px;
+color: #444;
+}
+.lightable-paper tfoot tr td {
+border: 0;
+}
+.lightable-paper tfoot tr:first-child td {
+border-top: 1px solid #00000020;
+}
+.lightable-paper thead tr:last-child th {
+color: #666;
+vertical-align: bottom;
+border-bottom: 1px solid #00000020;
+line-height: 1.15em;
+padding: 10px 5px;
+}
+.lightable-paper td {
+vertical-align: middle;
+border-bottom: 1px solid #00000010;
+line-height: 1.15em;
+padding: 7px 5px;
+}
+.lightable-paper.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-paper.lightable-striped tbody tr:nth-child(even) {
+background-color: #00000008;
+}
+.lightable-paper.lightable-striped tbody td {
+border: 0;
+}
+</style>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Bioequivalence Tests for Parallel Trial
+Designs: 3 Arms, 3 Endpoints</h1>
+
+
+
+<p>In the <code>SimTOST</code> R package, which is specifically designed
+for sample size estimation for bioequivalence studies, hypothesis
+testing is based on the Two One-Sided Tests (TOST) procedure. <span class="citation">(<a href="#ref-sozu_sample_2015">Sozu et al.
+2015</a>)</span> In TOST, the equivalence test is framed as a comparison
+between the the null hypothesis of ‘new product is worse by a clinically
+relevant quantity’ and the alternative hypothesis of ‘difference between
+products is too small to be clinically relevant’. This vignette focuses
+on a parallel design, with 3 arms/treatments and 3 primary
+endpoints.</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Similar to the example presented in <a href="sampleSize_parallel_2A3E.html">Bioequivalence Tests for Parallel
+Trial Designs: 2 Arms, 3 Endpoints</a>, where equivalence across
+multiple endpoints was assessed, this vignette extends the framework to
+trials involving two reference products. This scenario arises when
+regulators from different regions require comparisons with their locally
+sourced reference biosimilars.</p>
+<p>In many studies, the aim is to evaluate equivalence across multiple
+primary variables. For example, the European Medicines Agency (EMA)
+recommends demonstrating equivalence for both the Area Under the Curve
+(AUC) and the maximum concentration (Cmax) when endpoints. In this
+scenario, we additionally evaluate equivalence across three treatment
+arms, including a test biosimilar and two reference products, each
+sourced from a different regulatory region.</p>
+<p>This vignette demonstrates advanced techniques for calculating sample
+size in such trials, in which multiple endpoints and multiple reference
+products are considered. As an illustrative example, we use data from
+the phase 1 trial <a href="https://clinicaltrials.gov/study/NCT01922336#study-overview">NCT01922336</a>,
+which assessed pharmacokinetic (PK) endpoints following a single dose of
+SB2, its EU-sourced reference product (EU-INF), and its US-sourced
+reference product (US-INF) <span class="citation">(<a href="#ref-shin_randomized_2015">Shin et al. 2015</a>)</span>.</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+Primary PK measures between test and reference product. Data represent
+arithmetic mean +- standard deviation.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+PK measure
+</th>
+<th style="text-align:left;">
+SB2
+</th>
+<th style="text-align:left;">
+EU-INF
+</th>
+<th style="text-align:left;">
+US-INF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+AUCinf (<span class="math inline">\(\mu\)</span>g*h/mL)
+</td>
+<td style="text-align:left;">
+38,703 <span class="math inline">\(\pm\)</span> 11,114
+</td>
+<td style="text-align:left;">
+39,360 <span class="math inline">\(\pm\)</span> 12,332
+</td>
+<td style="text-align:left;">
+39,270 <span class="math inline">\(\pm\)</span> 10,064
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AUClast (<span class="math inline">\(\mu\)</span>g*h/mL)
+</td>
+<td style="text-align:left;">
+36,862 <span class="math inline">\(\pm\)</span> 9133
+</td>
+<td style="text-align:left;">
+37,022 <span class="math inline">\(\pm\)</span> 9398
+</td>
+<td style="text-align:left;">
+37,368 <span class="math inline">\(\pm\)</span> 8332
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cmax (<span class="math inline">\(\mu\)</span>g/mL)
+</td>
+<td style="text-align:left;">
+127.0 <span class="math inline">\(\pm\)</span> 16.9
+</td>
+<td style="text-align:left;">
+126.2 <span class="math inline">\(\pm\)</span> 17.9
+</td>
+<td style="text-align:left;">
+129.2 <span class="math inline">\(\pm\)</span> 18.8
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="input-data" class="section level1">
+<h1>Input Data</h1>
+<p>As in <a href="sampleSize_parallel_2A3E.html">this vignette</a>, the
+following inputs are required:</p>
+<ul>
+<li>Means for each endpoint and treatment arm
+(<code>mu_list</code>),</li>
+<li>Standard deviations for each endpoint and arm
+(<code>sigma_list</code>),</li>
+<li>Endpoint and arm names (<code>yname_list</code> and
+<code>arm_names</code>),</li>
+<li>Arms to be compared within each comparator
+(<code>list_comparator</code>),</li>
+<li>Endpoints to be compared within each comparator
+(<code>list_y_comparator</code>).</li>
+</ul>
+<p>In this example, we simultaneously compare the trial drug (SB2) to
+each reference biosimilar:</p>
+<ul>
+<li>SB2 vs. EU-INF</li>
+<li>SB2 vs. US-INF</li>
+</ul>
+<p>We define the required list objects:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Mean values for each endpoint and arm</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>mu_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">SB2 =</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="dv">38703</span>, <span class="at">AUClast =</span> <span class="dv">36862</span>, <span class="at">Cmax =</span> <span class="fl">127.0</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">EUINF =</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="dv">39360</span>, <span class="at">AUClast =</span> <span class="dv">37022</span>, <span class="at">Cmax =</span> <span class="fl">126.2</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">USINF =</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="dv">39270</span>, <span class="at">AUClast =</span> <span class="dv">37368</span>, <span class="at">Cmax =</span> <span class="fl">129.2</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co"># Standard deviation values for each endpoint and arm</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>sigma_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="at">SB2 =</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="dv">11114</span>, <span class="at">AUClast =</span> <span class="dv">9133</span>, <span class="at">Cmax =</span> <span class="fl">16.9</span>),</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  <span class="at">EUINF =</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="dv">12332</span>, <span class="at">AUClast =</span> <span class="dv">9398</span>, <span class="at">Cmax =</span> <span class="fl">17.9</span>),</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  <span class="at">USINF =</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="dv">10064</span>, <span class="at">AUClast =</span> <span class="dv">8332</span>, <span class="at">Cmax =</span> <span class="fl">18.8</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="simultaneous-testing-of-independent-co-primary-endpoints" class="section level1">
+<h1>Simultaneous Testing of Independent Co-Primary Endpoints</h1>
+<p>In this analysis, we adopt the <strong>Ratio of Means (ROM)</strong>
+approach to evaluate bioequivalence across independent co-primary
+endpoints.</p>
+<div id="different-hypotheses-across-endpoints" class="section level2">
+<h2>Different Hypotheses across endpoints</h2>
+<p>In this example, we aim to demonstrate:</p>
+<ul>
+<li>Bioequivalence of SB2 vs. EU-INF for AUCinf and Cmax, and</li>
+<li>Bioequivalence of SB2 vs. US-INF for AUClast and Cmax.</li>
+</ul>
+<p>The comparisons are specified as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Arms to be compared</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>list_comparator <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">EMA =</span> <span class="fu">c</span>(<span class="st">&quot;SB2&quot;</span>, <span class="st">&quot;EUINF&quot;</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">FDA =</span> <span class="fu">c</span>(<span class="st">&quot;SB2&quot;</span>, <span class="st">&quot;USINF&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co"># Endpoints to be compared</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>list_y_comparator <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="at">EMA =</span> <span class="fu">c</span>(<span class="st">&quot;AUCinf&quot;</span>, <span class="st">&quot;Cmax&quot;</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="at">FDA =</span> <span class="fu">c</span>(<span class="st">&quot;AUClast&quot;</span>, <span class="st">&quot;Cmax&quot;</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>)</span></code></pre></div>
+<p>For all endpoints, bioequivalence is established if the 90%
+confidence intervals for the ratios of the geometric means fall within
+the equivalence range of 80.00% to 125.00%.</p>
+<p>Below we define the equivalence boundaries for each comparison:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>list_lequi.tol <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="st">&quot;EMA&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="fl">0.8</span>, <span class="at">Cmax =</span> <span class="fl">0.8</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="st">&quot;FDA&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="at">AUClast =</span> <span class="fl">0.8</span>, <span class="at">Cmax =</span> <span class="fl">0.8</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>list_uequi.tol <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="st">&quot;EMA&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="fl">1.25</span>, <span class="at">Cmax =</span> <span class="fl">1.25</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="st">&quot;FDA&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="at">AUClast =</span> <span class="fl">1.25</span>, <span class="at">Cmax =</span> <span class="fl">1.25</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>)</span></code></pre></div>
+<p>Here, the <code>list_comparator</code> parameter specifies the arms
+being compared, while <code>list_lequi.tol</code> and
+<code>list_uequi.tol</code> define the lower and upper equivalence
+boundaries for the two endpoints.</p>
+<p>To calculate the required sample size for testing equivalence under
+the specified conditions, we use the <a href="../reference/sampleSize.html">sampleSize()</a> function. This
+function computes the total sample size needed to achieve the target
+power while ensuring equivalence criteria are met.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(SimTOST)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>(N_ss <span class="ot">&lt;-</span> <span class="fu">sampleSize</span>(<span class="at">power =</span> <span class="fl">0.9</span>,        <span class="co"># Target power</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>                    <span class="at">alpha =</span> <span class="fl">0.05</span>,      <span class="co"># Type I error rate</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>                    <span class="at">mu_list =</span> mu_list, <span class="co"># Means for each endpoint and arm</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>                    <span class="at">sigma_list =</span> sigma_list, <span class="co"># Standard deviations</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>                    <span class="at">list_comparator =</span> list_comparator, <span class="co"># Comparator arms</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>                    <span class="at">list_y_comparator =</span> list_y_comparator, <span class="co"># Endpoints to compare</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>                    <span class="at">list_lequi.tol =</span> list_lequi.tol, <span class="co"># Lower equivalence boundaries</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>                    <span class="at">list_uequi.tol =</span> list_uequi.tol, <span class="co"># Upper equivalence boundaries</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>                    <span class="at">dtype =</span> <span class="st">&quot;parallel&quot;</span>, <span class="co"># Trial design type</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>                    <span class="at">ctype =</span> <span class="st">&quot;ROM&quot;</span>,      <span class="co"># Test type: Ratio of Means</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>                    <span class="at">vareq =</span> <span class="cn">TRUE</span>,       <span class="co"># Assume equal variances</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>                    <span class="at">lognorm =</span> <span class="cn">TRUE</span>,     <span class="co"># Log-normal distribution assumption</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>                    <span class="at">nsim =</span> <span class="dv">1000</span>,        <span class="co"># Number of stochastic simulations</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>                    <span class="at">seed =</span> <span class="dv">1234</span>))       <span class="co"># Random seed for reproducibility</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; Sample Size Calculation Results</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; Study Design: parallel trial targeting 90% power with a 5% type-I error.</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; Comparisons:</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. EUINF </span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: AUCinf, Cmax </span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt;       (multiple co-primary endpoints, m =  2 )</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. USINF </span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: AUClast, Cmax </span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="co">#&gt;       (multiple co-primary endpoints, m =  2 )</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="co">#&gt;                  Parameter       Value</span></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a><span class="co">#&gt;          Total Sample Size         117</span></span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a><span class="co">#&gt;             Achieved Power          90</span></span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a><span class="co">#&gt;  Power Confidence Interval 87.9 - 91.8</span></span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span></code></pre></div>
+<p>A total sample size of 117 patients (or 39 per arm) is required to
+demonstrate equivalence.</p>
+</div>
+</div>
+<div id="simultaneous-testing-of-independent-primary-endpoints" class="section level1">
+<h1>Simultaneous Testing of Independent Primary Endpoints</h1>
+<div id="equivalence-for-at-least-2-of-the-3-endpoints-with-bonferroni-adjustment" class="section level2">
+<h2>Equivalence for At Least 2 of the 3 Endpoints with Bonferroni
+Adjustment</h2>
+<p>In this example, we aim to establish equivalence for at least two out
+of three primary endpoints while accounting for multiplicity using the
+Bonferroni adjustment. The following assumptions are made:</p>
+<ul>
+<li>Equality of Variances: variances are assumed to be equal across
+groups (<code>vareq = TRUE</code>).</li>
+<li>Testing Parameter: the Ratio of Means (ROM) is used as the testing
+parameter (<code>ctype = &quot;ROM&quot;</code>).</li>
+<li>Design: a parallel trial design is assumed
+(<code>dtype = &quot;parallel&quot;</code>).</li>
+<li>Distribution: endpoint data follows a log-normal distribution
+(<code>lognorm = TRUE</code>).</li>
+<li>Correlation: endpoints are assumed to be independent, with no
+correlation between them (default <code>rho = 0</code>).</li>
+<li>Multiplicity Adjustment: the Bonferroni correction is applied to
+control for Type I error (<code>adjust = &quot;bon&quot;</code>).</li>
+<li>Equivalence Criterion: equivalence is required for at least two of
+the three endpoints (<code>k = 2</code>).</li>
+</ul>
+<p>The comparisons and equivalence boundaries are defined as
+follows:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Endpoints to be compared for each comparator</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>list_y_comparator <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">EMA =</span> <span class="fu">c</span>(<span class="st">&quot;AUCinf&quot;</span>, <span class="st">&quot;AUClast&quot;</span>, <span class="st">&quot;Cmax&quot;</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">FDA =</span> <span class="fu">c</span>(<span class="st">&quot;AUCinf&quot;</span>, <span class="st">&quot;AUClast&quot;</span>, <span class="st">&quot;Cmax&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co"># Define lower equivalence boundaries for each comparator</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>list_lequi.tol <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="at">EMA =</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="fl">0.8</span>, <span class="at">AUClast =</span> <span class="fl">0.8</span>, <span class="at">Cmax =</span> <span class="fl">0.8</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="at">FDA =</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="fl">0.8</span>, <span class="at">AUClast =</span> <span class="fl">0.8</span>, <span class="at">Cmax =</span> <span class="fl">0.8</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>)</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co"># Define upper equivalence boundaries for each comparator</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>list_uequi.tol <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  <span class="at">EMA =</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="fl">1.25</span>, <span class="at">AUClast =</span> <span class="fl">1.25</span>, <span class="at">Cmax =</span> <span class="fl">1.25</span>),</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  <span class="at">FDA =</span> <span class="fu">c</span>(<span class="at">AUCinf =</span> <span class="fl">1.25</span>, <span class="at">AUClast =</span> <span class="fl">1.25</span>, <span class="at">Cmax =</span> <span class="fl">1.25</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>)</span></code></pre></div>
+<p>Finally, we calculate the required sample size:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>(N_mp <span class="ot">&lt;-</span> <span class="fu">sampleSize</span>(<span class="at">power =</span> <span class="fl">0.9</span>,       <span class="co"># Target power</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                    <span class="at">alpha =</span> <span class="fl">0.05</span>,      <span class="co"># Type I error rate</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                    <span class="at">mu_list =</span> mu_list, <span class="co"># Means for each endpoint and arm</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>                    <span class="at">sigma_list =</span> sigma_list, <span class="co"># Standard deviations</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>                    <span class="at">list_comparator =</span> list_comparator, <span class="co"># Comparator arms</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                    <span class="at">list_y_comparator =</span> list_y_comparator, <span class="co"># Endpoints to compare</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>                    <span class="at">list_lequi.tol =</span> list_lequi.tol, <span class="co"># Lower equivalence boundaries</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>                    <span class="at">list_uequi.tol =</span> list_uequi.tol, <span class="co"># Upper equivalence boundaries</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>                    <span class="at">k =</span> <span class="dv">2</span>,              <span class="co"># Number of endpoints required to demonstrate equivalence</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>                    <span class="at">adjust =</span> <span class="st">&quot;bon&quot;</span>,     <span class="co"># Bonferroni adjustment for multiple comparisons</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>                    <span class="at">dtype =</span> <span class="st">&quot;parallel&quot;</span>, <span class="co"># Trial design type (parallel group)</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>                    <span class="at">ctype =</span> <span class="st">&quot;ROM&quot;</span>,      <span class="co"># Test type: Ratio of Means</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>                    <span class="at">vareq =</span> <span class="cn">TRUE</span>,       <span class="co"># Assume equal variances across arms</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>                    <span class="at">lognorm =</span> <span class="cn">TRUE</span>,     <span class="co"># Log-normal distribution assumption</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>                    <span class="at">nsim =</span> <span class="dv">1000</span>,        <span class="co"># Number of stochastic simulations</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>                    <span class="at">seed =</span> <span class="dv">1234</span>))       <span class="co"># Random seed for reproducibility</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; Sample Size Calculation Results</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; Study Design: parallel trial targeting 90% power with a 5% type-I error.</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; Comparisons:</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. EUINF </span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: AUCinf, AUClast, Cmax </span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt;       (multiple primary endpoints, k =  2 )</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt;     - Multiplicity Correction: Bonferroni </span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt;       Adjusted Significance Levels: alpha = 0.0167 </span></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. USINF </span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: AUCinf, AUClast, Cmax </span></span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="co">#&gt;       (multiple primary endpoints, k =  2 )</span></span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a><span class="co">#&gt;     - Multiplicity Correction: Bonferroni </span></span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a><span class="co">#&gt;       Adjusted Significance Levels: alpha = 0.0167 </span></span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="co">#&gt;                  Parameter       Value</span></span>
+<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="co">#&gt;          Total Sample Size          93</span></span>
+<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="co">#&gt;             Achieved Power          90</span></span>
+<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a><span class="co">#&gt;  Power Confidence Interval 87.9 - 91.8</span></span>
+<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span></code></pre></div>
+</div>
+<div id="unequal-allocation-rates-across-arms" class="section level2">
+<h2>Unequal Allocation Rates Across Arms</h2>
+<p>In this example, we build upon the previous scenario but introduce
+unequal allocation rates across treatment arms. Specifically, we require
+that the number of patients in the new treatment arm is double the
+number in each of the reference arms.</p>
+<p>This can be achieved by specifying the treatment allocation rate
+parameter (<code>TAR</code>). Rates are provided as a vector, for
+example: <code>TAR = c(2, 1, 1)</code>. This ensures that for every two
+patients assigned to the new treatment arm, one patient is assigned to
+each reference arm.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>(N_mp2 <span class="ot">&lt;-</span> <span class="fu">sampleSize</span>(<span class="at">power =</span> <span class="fl">0.9</span>,       <span class="co"># Target power</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                     <span class="at">alpha =</span> <span class="fl">0.05</span>,      <span class="co"># Type I error rate</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>                     <span class="at">mu_list =</span> mu_list, <span class="co"># Means for each endpoint and arm</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>                     <span class="at">sigma_list =</span> sigma_list, <span class="co"># Standard deviations</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>                     <span class="at">list_comparator =</span> list_comparator, <span class="co"># Comparator arms</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>                     <span class="at">list_y_comparator =</span> list_y_comparator, <span class="co"># Endpoints to compare</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>                     <span class="at">list_lequi.tol =</span> list_lequi.tol, <span class="co"># Lower equivalence boundaries</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>                     <span class="at">list_uequi.tol =</span> list_uequi.tol, <span class="co"># Upper equivalence boundaries</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>                     <span class="at">k =</span> <span class="dv">2</span>,              <span class="co"># Number of endpoints required to demonstrate equivalence</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>                     <span class="at">adjust =</span> <span class="st">&quot;bon&quot;</span>,     <span class="co"># Bonferroni adjustment for multiple comparisons</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>                     <span class="at">TAR =</span> <span class="fu">c</span>(<span class="st">&quot;SB2&quot;</span> <span class="ot">=</span> <span class="dv">2</span>, <span class="st">&quot;EUINF&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;USINF&quot;</span> <span class="ot">=</span> <span class="dv">1</span>), <span class="co"># Treatment allocation rates</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>                     <span class="at">dtype =</span> <span class="st">&quot;parallel&quot;</span>, <span class="co"># Trial design type (parallel group)</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>                     <span class="at">ctype =</span> <span class="st">&quot;ROM&quot;</span>,      <span class="co"># Test type: Ratio of Means</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>                     <span class="at">vareq =</span> <span class="cn">TRUE</span>,       <span class="co"># Assume equal variances across arms</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>                     <span class="at">lognorm =</span> <span class="cn">TRUE</span>,     <span class="co"># Log-normal distribution assumption</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>                     <span class="at">nsim =</span> <span class="dv">1000</span>,        <span class="co"># Number of stochastic simulations</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>                     <span class="at">seed =</span> <span class="dv">1234</span>))       <span class="co"># Random seed for reproducibility</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; Sample Size Calculation Results</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt; Study Design: parallel trial targeting 90% power with a 5% type-I error.</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt; Comparisons:</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. EUINF </span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: AUCinf, AUClast, Cmax </span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a><span class="co">#&gt;       (multiple primary endpoints, k =  2 )</span></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co">#&gt;     - Multiplicity Correction: Bonferroni </span></span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a><span class="co">#&gt;       Adjusted Significance Levels: alpha = 0.0167 </span></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. USINF </span></span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: AUCinf, AUClast, Cmax </span></span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a><span class="co">#&gt;       (multiple primary endpoints, k =  2 )</span></span>
+<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a><span class="co">#&gt;     - Multiplicity Correction: Bonferroni </span></span>
+<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co">#&gt;       Adjusted Significance Levels: alpha = 0.0167 </span></span>
+<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a><span class="co">#&gt;                  Parameter       Value</span></span>
+<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a><span class="co">#&gt;          Total Sample Size          96</span></span>
+<span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a><span class="co">#&gt;             Achieved Power          90</span></span>
+<span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a><span class="co">#&gt;  Power Confidence Interval 87.9 - 91.8</span></span>
+<span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span></code></pre></div>
+<p>Results indicate that 48 patients are required for the active
+treatment arm (SB2), and 24 patients are required for each reference
+arm. The total sample size required is 96, which is larger compared to
+the trial with an equal allocation ratio, for which the total sample
+size was 93.</p>
+</div>
+<div id="accounting-for-participant-dropout" class="section level2">
+<h2>Accounting for Participant Dropout</h2>
+<p>In the examples above, the sample size calculations assumed that all
+enrolled patients complete the trial. However, in practice, a certain
+percentage of participants drop out, which can impact the required
+sample size. To account for this, we consider a 20% dropout rate across
+all treatment arms.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>(N_mp3 <span class="ot">&lt;-</span> <span class="fu">sampleSize</span>(<span class="at">power =</span> <span class="fl">0.9</span>,       <span class="co"># Target power</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                     <span class="at">alpha =</span> <span class="fl">0.05</span>,      <span class="co"># Type I error rate</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>                     <span class="at">mu_list =</span> mu_list, <span class="co"># Means for each endpoint and arm</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>                     <span class="at">sigma_list =</span> sigma_list, <span class="co"># Standard deviations</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>                     <span class="at">list_comparator =</span> list_comparator, <span class="co"># Comparator arms</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>                     <span class="at">list_y_comparator =</span> list_y_comparator, <span class="co"># Endpoints to compare</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>                     <span class="at">list_lequi.tol =</span> list_lequi.tol, <span class="co"># Lower equivalence boundaries</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>                     <span class="at">list_uequi.tol =</span> list_uequi.tol, <span class="co"># Upper equivalence boundaries</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>                     <span class="at">k =</span> <span class="dv">2</span>,              <span class="co"># Number of endpoints required to demonstrate equivalence</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>                     <span class="at">adjust =</span> <span class="st">&quot;bon&quot;</span>,     <span class="co"># Bonferroni adjustment for multiple comparisons</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>                     <span class="at">TAR =</span> <span class="fu">c</span>(<span class="st">&quot;SB2&quot;</span> <span class="ot">=</span> <span class="dv">2</span>, <span class="st">&quot;EUINF&quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;USINF&quot;</span> <span class="ot">=</span> <span class="dv">1</span>), <span class="co"># Treatment allocation rates</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>                     <span class="at">dropout =</span> <span class="fu">c</span>(<span class="st">&quot;SB2&quot;</span> <span class="ot">=</span> <span class="fl">0.20</span>, <span class="st">&quot;EUINF&quot;</span> <span class="ot">=</span> <span class="fl">0.20</span>, <span class="st">&quot;USINF&quot;</span> <span class="ot">=</span> <span class="fl">0.20</span>), <span class="co"># Expected dropout rates</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>                     <span class="at">dtype =</span> <span class="st">&quot;parallel&quot;</span>, <span class="co"># Trial design type (parallel group)</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>                     <span class="at">ctype =</span> <span class="st">&quot;ROM&quot;</span>,      <span class="co"># Test type: Ratio of Means</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>                     <span class="at">vareq =</span> <span class="cn">TRUE</span>,       <span class="co"># Assume equal variances across arms</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>                     <span class="at">lognorm =</span> <span class="cn">TRUE</span>,     <span class="co"># Log-normal distribution assumption</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>                     <span class="at">nsim =</span> <span class="dv">1000</span>,        <span class="co"># Number of stochastic simulations</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>                     <span class="at">seed =</span> <span class="dv">1234</span>))       <span class="co"># Random seed for reproducibility</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt; Sample Size Calculation Results</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt; Study Design: parallel trial targeting 90% power with a 5% type-I error.</span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt; Comparisons:</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. EUINF </span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: AUCinf, AUClast, Cmax </span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt;       (multiple primary endpoints, k =  2 )</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt;     - Multiplicity Correction: Bonferroni </span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt;       Adjusted Significance Levels: alpha = 0.0167 </span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. USINF </span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: AUCinf, AUClast, Cmax </span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt;       (multiple primary endpoints, k =  2 )</span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="co">#&gt;     - Multiplicity Correction: Bonferroni </span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&gt;       Adjusted Significance Levels: alpha = 0.0167 </span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="co">#&gt;                  Parameter       Value</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a><span class="co">#&gt;          Total Sample Size         120</span></span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a><span class="co">#&gt;             Achieved Power          90</span></span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a><span class="co">#&gt;  Power Confidence Interval 87.9 - 91.8</span></span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span></code></pre></div>
+<p>Considering a 20% dropout rate, the total sample size required is
+120.</p>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-shin_randomized_2015" class="csl-entry">
+Shin, Donghoon, Youngdoe Kim, Yoo Seok Kim, Thomas Körnicke, and Rainard
+Fuhr. 2015. <span>“A <span>Randomized</span>, <span>Phase I
+Pharmacokinetic Study Comparing SB2</span> and <span>Infliximab
+Reference Product</span> (<span>Remicade</span><span></span>) in
+<span>Healthy Subjects</span>.”</span> <em>BioDrugs</em> 29 (6): 381–88.
+<a href="https://doi.org/10.1007/s40259-015-0150-5">https://doi.org/10.1007/s40259-015-0150-5</a>.
+</div>
+<div id="ref-sozu_sample_2015" class="csl-entry">
+Sozu, Takashi, Tomoyuki Sugimoto, Toshimitsu Hamasaki, and Scott R.
+Evans. 2015. <em>Sample <span>Size Determination</span> in
+<span>Clinical Trials</span> with <span>Multiple Endpoints</span></em>.
+<span>SpringerBriefs</span> in <span>Statistics</span>. Cham: Springer
+International Publishing. <a href="https://doi.org/10.1007/978-3-319-22005-5">https://doi.org/10.1007/978-3-319-22005-5</a>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Bioequivalence Tests for Parallel Trial Designs: 2 Arms, 1 Endpoint</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Bioequivalence Tests for Parallel Trial
+Designs: 2 Arms, 1 Endpoint</h1>
+
+
+
+<p>In the <code>SimTOST</code> R package, which is specifically designed
+for sample size estimation for bioequivalence studies, hypothesis
+testing is based on the Two One-Sided Tests (TOST) procedure. <span class="citation">(<a href="#ref-sozu_sample_2015">Sozu et al.
+2015</a>)</span> In TOST, the equivalence test is framed as a comparison
+between the the null hypothesis of ‘new product is worse by a clinically
+relevant quantity’ and the alternative hypothesis of ‘difference between
+products is too small to be clinically relevant’. This vignette focuses
+on a parallel design, with 2 arms/treatments and 1 primary endpoint.</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<div id="difference-of-means-test" class="section level2">
+<h2>Difference of Means Test</h2>
+<p>This example, adapted from Example 1 in the PASS manual chapter 685
+<span class="citation">(<a href="#ref-PASSch685">NCSS 2025</a>)</span>,
+illustrates the process of planning a clinical trial to assess
+biosimilarity. Specifically, the trial aims to compare blood pressure
+outcomes between two groups.</p>
+<div id="scenario" class="section level3">
+<h3>Scenario</h3>
+<p>Drug B is a well-established biologic drug used to control blood
+pressure. Its exclusive marketing license has expired, creating an
+opportunity for other companies to develop biosimilars. Drug A is a new
+competing drug being developed as a potential biosimilar to Drug B. The
+goal is to determine whether Drug A meets FDA biosimilarity requirements
+in terms of safety, purity, and therapeutic response when compared to
+Drug B.</p>
+</div>
+<div id="trial-design" class="section level3">
+<h3>Trial Design</h3>
+<p>The study follows a parallel-group design with the following key
+assumptions:</p>
+<ul>
+<li>Reference Group (Drug B): Average blood pressure is 96 mmHg, with a
+within-group standard deviation of 18 mmHg.</li>
+<li>Mean Difference: As per FDA guidelines, the assumed difference
+between the two groups is set to <span class="math inline">\(\delta =
+\sigma/8 = 2.25\)</span> mmHg.</li>
+<li>Biosimilarity Limits: Defined as ±1.5σ = ±27 mmHg.</li>
+<li>Desired Type-I Error: 2.5%</li>
+<li>Target Power: 90%</li>
+</ul>
+<p>To implement these parameters in R, the following code snippet can be
+used:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Reference group mean blood pressure (Drug B)</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>mu_r <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="dv">96</span>, <span class="st">&quot;BP&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Treatment group mean blood pressure (Drug A)</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>mu_t <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="dv">96</span> <span class="sc">+</span> <span class="fl">2.25</span>, <span class="st">&quot;BP&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># Common within-group standard deviation</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="dv">18</span>, <span class="st">&quot;BP&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co"># Lower and upper biosimilarity limits</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>lequi_lower <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="sc">-</span><span class="dv">27</span>, <span class="st">&quot;BP&quot;</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>lequi_upper <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="dv">27</span>, <span class="st">&quot;BP&quot;</span>)</span></code></pre></div>
+</div>
+<div id="objective" class="section level3">
+<h3>Objective</h3>
+<p>To explore the power of the test across a range of group sample
+sizes, power for group sizes varying from 6 to 20 will be
+calculated.</p>
+</div>
+<div id="implementation" class="section level3">
+<h3>Implementation</h3>
+<p>To estimate the power for different sample sizes, we use the <a href="../reference/sampleSize.html">sampleSize()</a> function. The
+function is configured with a power target of 0.90, a type-I error rate
+of 0.025, and the specified mean and standard deviation values for the
+reference and treatment groups. The optimization method is set to
+<code>&quot;step-by-step&quot;</code> to display the achieved power for each
+sample size, providing insights into the results.</p>
+<p>Below illustrates how the function can be implemented in R:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(SimTOST)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>(N_ss <span class="ot">&lt;-</span> <span class="fu">sampleSize</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="at">power =</span> <span class="fl">0.90</span>,                  <span class="co"># Target power</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.025</span>,                 <span class="co"># Type-I error rate</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">mu_list =</span> <span class="fu">list</span>(<span class="st">&quot;R&quot;</span> <span class="ot">=</span> mu_r, <span class="st">&quot;T&quot;</span> <span class="ot">=</span> mu_t), <span class="co"># Means for reference and treatment groups</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">sigma_list =</span> <span class="fu">list</span>(<span class="st">&quot;R&quot;</span> <span class="ot">=</span> sigma, <span class="st">&quot;T&quot;</span> <span class="ot">=</span> sigma), <span class="co"># Standard deviations</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="at">list_comparator =</span> <span class="fu">list</span>(<span class="st">&quot;T_vs_R&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;R&quot;</span>, <span class="st">&quot;T&quot;</span>)), <span class="co"># Comparator setup</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="at">list_lequi.tol =</span> <span class="fu">list</span>(<span class="st">&quot;T_vs_R&quot;</span> <span class="ot">=</span> lequi_lower),  <span class="co"># Lower equivalence limit</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="at">list_uequi.tol =</span> <span class="fu">list</span>(<span class="st">&quot;T_vs_R&quot;</span> <span class="ot">=</span> lequi_upper),  <span class="co"># Upper equivalence limit</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="at">dtype =</span> <span class="st">&quot;parallel&quot;</span>,            <span class="co"># Study design</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="at">ctype =</span> <span class="st">&quot;DOM&quot;</span>,                 <span class="co"># Comparison type</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="at">lognorm =</span> <span class="cn">FALSE</span>,               <span class="co"># Assumes normal distribution</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="at">optimization_method =</span> <span class="st">&quot;step-by-step&quot;</span>, <span class="co"># Optimization method</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="at">ncores =</span> <span class="dv">1</span>,                    <span class="co"># Single-core processing</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="at">nsim =</span> <span class="dv">1000</span>,                   <span class="co"># Number of simulations</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">1234</span>                    <span class="co"># Random seed for reproducibility</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>))</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; Sample Size Calculation Results</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt; Study Design: parallel trial targeting 90% power with a 2.5% type-I error.</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt; Comparisons:</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt;    R vs. T </span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: BP </span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt;                  Parameter       Value</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt;          Total Sample Size          26</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt;             Achieved Power        90.8</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt;  Power Confidence Interval 88.8 - 92.5</span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co"># Display iteration results</span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>N_ss<span class="sc">$</span>table.iter</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co">#&gt; Index: &lt;n_iter&gt;</span></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="co">#&gt;     n_iter n_drop   n_R   n_T n_total power  power_LCI  power_UCI</span></span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#&gt;      &lt;int&gt;  &lt;num&gt; &lt;num&gt; &lt;num&gt;   &lt;num&gt; &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span></span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co">#&gt;  1:      2      0     2     2       4 0.042 0.03079269 0.05685194</span></span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt;  2:      3      0     3     3       6 0.071 0.05622292 0.08916283</span></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt;  3:      4      0     4     4       8 0.118 0.09898992 0.14000650</span></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt;  4:      5      0     5     5      10 0.197 0.17305355 0.22331236</span></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt;  5:      6      0     6     6      12 0.335 0.30593958 0.36534479</span></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt;  6:      7      0     7     7      14 0.468 0.43675913 0.49948974</span></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt;  7:      8      0     8     8      16 0.597 0.56577960 0.62746582</span></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt;  8:      9      0     9     9      18 0.698 0.66831899 0.72613905</span></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt;  9:     10      0    10    10      20 0.766 0.73825476 0.79167071</span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; 10:     11      0    11    11      22 0.828 0.80284126 0.85059491</span></span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt; 11:     12      0    12    12      24 0.885 0.86320172 0.90377751</span></span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt; 12:     13      0    13    13      26 0.908 0.88794993 0.92484078</span></span></code></pre></div>
+<p>We can visualize the power curve for a range of sample sizes using
+the following code snippet:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">plot</span>(N_ss)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>To account for an anticipated dropout rate of 20% in each group, we
+need to adjust the sample size. The following code demonstrates how to
+incorporate this adjustment using a custom optimization routine. This
+routine is designed to find the smallest integer sample size that meets
+or exceeds the target power. It employs a stepwise search strategy,
+starting with large step sizes that are progressively refined as the
+solution is approached.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Adjusted sample size calculation with 20% dropout rate</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>(N_ss_dropout <span class="ot">&lt;-</span> <span class="fu">sampleSize</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">power =</span> <span class="fl">0.90</span>,                  <span class="co"># Target power</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.025</span>,                 <span class="co"># Type-I error rate</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">mu_list =</span> <span class="fu">list</span>(<span class="st">&quot;R&quot;</span> <span class="ot">=</span> mu_r, <span class="st">&quot;T&quot;</span> <span class="ot">=</span> mu_t), <span class="co"># Means for reference and treatment groups</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">sigma_list =</span> <span class="fu">list</span>(<span class="st">&quot;R&quot;</span> <span class="ot">=</span> sigma, <span class="st">&quot;T&quot;</span> <span class="ot">=</span> sigma), <span class="co"># Standard deviations</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="at">list_comparator =</span> <span class="fu">list</span>(<span class="st">&quot;T_vs_R&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;R&quot;</span>, <span class="st">&quot;T&quot;</span>)), <span class="co"># Comparator setup</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="at">list_lequi.tol =</span> <span class="fu">list</span>(<span class="st">&quot;T_vs_R&quot;</span> <span class="ot">=</span> lequi_lower),  <span class="co"># Lower equivalence limit</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="at">list_uequi.tol =</span> <span class="fu">list</span>(<span class="st">&quot;T_vs_R&quot;</span> <span class="ot">=</span> lequi_upper),  <span class="co"># Upper equivalence limit</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="at">dropout =</span> <span class="fu">c</span>(<span class="st">&quot;R&quot;</span> <span class="ot">=</span> <span class="fl">0.20</span>, <span class="st">&quot;T&quot;</span> <span class="ot">=</span> <span class="fl">0.20</span>), <span class="co"># Expected dropout rates</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>  <span class="at">dtype =</span> <span class="st">&quot;parallel&quot;</span>,            <span class="co"># Study design</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="at">ctype =</span> <span class="st">&quot;DOM&quot;</span>,                 <span class="co"># Comparison type</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>  <span class="at">lognorm =</span> <span class="cn">FALSE</span>,               <span class="co"># Assumes normal distribution</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="at">optimization_method =</span> <span class="st">&quot;fast&quot;</span>,  <span class="co"># Fast optimization method</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  <span class="at">nsim =</span> <span class="dv">1000</span>,                   <span class="co"># Number of simulations</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">1234</span>                    <span class="co"># Random seed for reproducibility</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>))</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; Sample Size Calculation Results</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; Study Design: parallel trial targeting 90% power with a 2.5% type-I error.</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; Comparisons:</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt;    R vs. T </span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: BP </span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt;                  Parameter       Value</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="co">#&gt;          Total Sample Size          32</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="co">#&gt;             Achieved Power        90.8</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="co">#&gt;  Power Confidence Interval 88.8 - 92.5</span></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span></code></pre></div>
+<p>Previously, finding the required sample size took 12 iterations. With
+the custom optimization routine, the number of iterations was reduced to
+8, significantly improving efficiency.</p>
+</div>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-PASSch685" class="csl-entry">
+NCSS. 2025. <span>“Biosimilarity Tests for the Difference Between Means
+Using a Parallel Two-Group Design.”</span> In <em>PASS Sample Size
+Software</em>. NCSS Statistical Software. <a href="https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Biosimilarity_Tests_for_the_Difference_Between_Means_using_a_Parallel_Two-Group_Design.pdf">https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Biosimilarity_Tests_for_the_Difference_Between_Means_using_a_Parallel_Two-Group_Design.pdf</a>.
+</div>
+<div id="ref-sozu_sample_2015" class="csl-entry">
+Sozu, Takashi, Tomoyuki Sugimoto, Toshimitsu Hamasaki, and Scott R.
+Evans. 2015. <em>Sample <span>Size Determination</span> in
+<span>Clinical Trials</span> with <span>Multiple Endpoints</span></em>.
+<span>SpringerBriefs</span> in <span>Statistics</span>. Cham: Springer
+International Publishing. <a href="https://doi.org/10.1007/978-3-319-22005-5">https://doi.org/10.1007/978-3-319-22005-5</a>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

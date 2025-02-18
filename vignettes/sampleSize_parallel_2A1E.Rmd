@@ -1,0 +1,118 @@
+---
+title: "Bioequivalence Tests for Parallel Trial Designs: 2 Arms, 1 Endpoint"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Bioequivalence Tests for Parallel Trial Designs: 2 Arms, 1 Endpoint}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: 'references.bib'
+link-citations: yes
+---
+
+```{r setup, include=FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
+options(rmarkdown.html_vignette.check_title = FALSE) #title of doc does not match vignette title
+doc.cache <- T #for cran; change to F
+```
+
+In the `SimTOST` R package, which is specifically designed for sample size estimation for bioequivalence studies, hypothesis testing is based on the Two One-Sided Tests (TOST) procedure. [@sozu_sample_2015]  In TOST, the equivalence test is framed as a comparison between the the null hypothesis of ‘new product is worse by a clinically relevant quantity’ and the alternative hypothesis of ‘difference between products is too small to be clinically relevant’. This vignette focuses on a parallel design, with 2 arms/treatments and 1 primary endpoint.
+
+# Introduction
+
+## Difference of Means Test
+This example, adapted from Example 1 in the PASS manual chapter 685 [@PASSch685], illustrates the process of planning a clinical trial to assess biosimilarity. Specifically, the trial aims to compare blood pressure outcomes between two groups.
+
+### Scenario
+Drug B is a well-established biologic drug used to control blood pressure. Its exclusive marketing license has expired, creating an opportunity for other companies to develop biosimilars. Drug A is a new competing drug being developed as a potential biosimilar to Drug B. The goal is to determine whether Drug A meets FDA biosimilarity requirements in terms of safety, purity, and therapeutic response when compared to Drug B.
+
+### Trial Design
+The study follows a parallel-group design with the following key assumptions:
+
+* Reference Group (Drug B): Average blood pressure is 96 mmHg, with a within-group standard deviation of 18 mmHg.
+* Mean Difference: As per FDA guidelines, the assumed difference between the two groups is set to $\delta = \sigma/8 = 2.25$ mmHg.
+* Biosimilarity Limits: Defined as ±1.5σ = ±27 mmHg.
+* Desired Type-I Error: 2.5%
+* Target Power: 90%
+
+To implement these parameters in R, the following code snippet can be used:
+
+```{r}
+# Reference group mean blood pressure (Drug B)
+mu_r <- setNames(96, "BP")
+
+# Treatment group mean blood pressure (Drug A)
+mu_t <- setNames(96 + 2.25, "BP")
+
+# Common within-group standard deviation
+sigma <- setNames(18, "BP")
+
+# Lower and upper biosimilarity limits
+lequi_lower <- setNames(-27, "BP")
+lequi_upper <- setNames(27, "BP")
+```
+
+### Objective
+To explore the power of the test across a range of group sample sizes, power for group sizes varying from 6 to 20 will be calculated. 
+
+### Implementation
+To estimate the power for different sample sizes, we use the  [sampleSize()](../reference/sampleSize.html) function. The function is configured with a power target of 0.90, a type-I error rate of 0.025, and the specified mean and standard deviation values for the reference and treatment groups. The optimization method is set to `"step-by-step"` to display the achieved power for each sample size, providing insights into the results.
+
+Below illustrates how the function can be implemented in R:
+
+```{r}
+library(SimTOST)
+
+(N_ss <- sampleSize(
+  power = 0.90,                  # Target power
+  alpha = 0.025,                 # Type-I error rate
+  mu_list = list("R" = mu_r, "T" = mu_t), # Means for reference and treatment groups
+  sigma_list = list("R" = sigma, "T" = sigma), # Standard deviations
+  list_comparator = list("T_vs_R" = c("R", "T")), # Comparator setup
+  list_lequi.tol = list("T_vs_R" = lequi_lower),  # Lower equivalence limit
+  list_uequi.tol = list("T_vs_R" = lequi_upper),  # Upper equivalence limit
+  dtype = "parallel",            # Study design
+  ctype = "DOM",                 # Comparison type
+  lognorm = FALSE,               # Assumes normal distribution
+  optimization_method = "step-by-step", # Optimization method
+  ncores = 1,                    # Single-core processing
+  nsim = 1000,                   # Number of simulations
+  seed = 1234                    # Random seed for reproducibility
+))
+
+# Display iteration results
+N_ss$table.iter
+```
+
+We can visualize the power curve for a range of sample sizes using the following code snippet:
+
+```{r}
+plot(N_ss)
+```
+
+To account for an anticipated dropout rate of 20% in each group, we need to adjust the sample size. The following code demonstrates how to incorporate this adjustment using a custom optimization routine. This routine is designed to find the smallest integer sample size that meets or exceeds the target power. It employs a stepwise search strategy, starting with large step sizes that are progressively refined as the solution is approached.
+
+```{r}
+# Adjusted sample size calculation with 20% dropout rate
+(N_ss_dropout <- sampleSize(
+  power = 0.90,                  # Target power
+  alpha = 0.025,                 # Type-I error rate
+  mu_list = list("R" = mu_r, "T" = mu_t), # Means for reference and treatment groups
+  sigma_list = list("R" = sigma, "T" = sigma), # Standard deviations
+  list_comparator = list("T_vs_R" = c("R", "T")), # Comparator setup
+  list_lequi.tol = list("T_vs_R" = lequi_lower),  # Lower equivalence limit
+  list_uequi.tol = list("T_vs_R" = lequi_upper),  # Upper equivalence limit
+  dropout = c("R" = 0.20, "T" = 0.20), # Expected dropout rates
+  dtype = "parallel",            # Study design
+  ctype = "DOM",                 # Comparison type
+  lognorm = FALSE,               # Assumes normal distribution
+  optimization_method = "fast",  # Fast optimization method
+  nsim = 1000,                   # Number of simulations
+  seed = 1234                    # Random seed for reproducibility
+))
+```
+
+Previously, finding the required sample size took `r nrow(N_ss$table.iter)` iterations. With the custom optimization routine, the number of iterations was reduced to `r nrow(N_ss_dropout$table.iter)`, significantly improving efficiency.
+ 
+# References

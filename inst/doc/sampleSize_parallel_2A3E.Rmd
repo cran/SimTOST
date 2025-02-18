@@ -1,0 +1,284 @@
+---
+title: "Bioequivalence Tests for Parallel Trial Designs: 2 Arms, 3 Endpoints"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Bioequivalence Tests for Parallel Trial Designs: 2 Arms, 3 Endpoints}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: 'references.bib'
+link-citations: yes
+---
+
+```{r setup, include=FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
+options(rmarkdown.html_vignette.check_title = FALSE) #title of doc does not match vignette title
+doc.cache <- T #for cran; change to F
+```
+
+In the `SimTOST` R package, which is specifically designed for sample size estimation for bioequivalence studies, hypothesis testing is based on the Two One-Sided Tests (TOST) procedure. [@sozu_sample_2015]  In TOST, the equivalence test is framed as a comparison between the the null hypothesis of ‘new product is worse by a clinically relevant quantity’ and the alternative hypothesis of ‘difference between products is too small to be clinically relevant’. This vignette focuses on a parallel design, with 2 arms/treatments and 3 primary endpoints.
+
+# Introduction
+In many studies, the aim is to evaluate equivalence across multiple primary endpoints. The European Medicines Agency (EMA) recommends demonstrating bioequivalence for both **Area Under the Curve** (AUC) and **maximum concentration** (Cmax) when assessing pharmacokinetic properties. This vignette presents advanced techniques for calculating sample size in parallel trial designs involving three treatment arms and two endpoints.
+
+As an illustrative example, we consider published data from the phase-1 trial [NCT01922336](https://clinicaltrials.gov/study/NCT01922336#study-overview). This trial measured the pharmacokinetics (PK) of SB2 compared to its EU-sourced reference product (EU_Remicade). The following PK measures were reported following a single dose of SB2 or its EU reference product Remicade [@shin_randomized_2015]:
+
+```{r, echo=FALSE}
+data <- data.frame("PK measure" = c("AUCinf ($\\mu$g*h/mL)","AUClast ($\\mu$g*h/mL)","Cmax ($\\mu$g/mL)"),
+                   "SB2" = c("38,703 $\\pm$ 11,114", "36,862 $\\pm$ 9133", "127.0 $\\pm$ 16.9"), 
+                   "EU-INF" = c("39,360  $\\pm$ 12,332", "37,022 $\\pm$ 9398", "126.2 $\\pm$ 17.9"))
+
+kableExtra::kable_styling(kableExtra::kable(data, 
+                                            col.names = c("PK measure", "SB2", "Remicade (EU)"),
+                                            caption = "Primary PK measures between test and reference product. Data represent arithmetic mean +- standard deviation."),
+                          bootstrap_options = "striped")
+```
+
+
+
+# Testing multiple co-primary endpoints
+The following sections describe strategies for determining the sample size required for a parallel-group trial aimed at establishing equivalence across three co-primary endpoints. The Ratio of Means (ROM) approach will be used to assess equivalence.
+
+A critical step in this process is defining the lower and upper equivalence boundaries for each endpoint. These boundaries set the acceptable ROM range within which equivalence is established. For simplicity, a consistent equivalence range of 0.8 to 1.25 is applied to all endpoints.
+
+
+## Independent Testing of Co-Primary Endpoints
+A conservative approach to sample size calculation involves testing each pharmacokinetic (PK) measure independently. This approach assumes that endpoints are uncorrelated and that equivalence is to be demonstrated for each endpoint separately. Consequently, the overall sample size required for the trial is the sum of the sample sizes calculated for each PK measure separately.
+
+```{r}
+library(SimTOST)
+
+# Sample size calculation for AUCinf
+(sim_AUCinf <- sampleSize(
+  power = 0.9,                                # Target power
+  alpha = 0.05,                               # Significance level
+  arm_names = c("SB2", "EU_Remicade"),        # Names of trial arms
+  list_comparator = list("EMA" = c("SB2","EU_Remicade")),   # Comparator configuration
+  mu_list = list("SB2" = 38703, "EU_Remicade" = 39360),     # Mean values
+  sigma_list = list("SB2" = 11114, "EU_Remicade" = 12332),  # Standard deviation values
+  list_lequi.tol = list("EMA" = 0.80),        # Lower equivalence margin
+  list_uequi.tol = list("EMA" = 1.25),        # Upper equivalence margin
+  nsim = 1000                                 # Number of stochastic simulations
+))
+
+# Sample size calculation for AUClast
+(sim_AUClast <- sampleSize(
+  power = 0.9,                                # Target power
+  alpha = 0.05,                               # Significance level
+  arm_names = c("SB2", "EU_Remicade"),        # Names of trial arms
+  list_comparator = list("EMA" = c("SB2", "EU_Remicade")),  # Comparator configuration
+  mu_list = list("SB2" = 36862, "EU_Remicade" = 37022),     # Mean values
+  sigma_list = list("SB2" = 9133, "EU_Remicade" = 9398),    # Standard deviation values
+  list_lequi.tol = list("EMA" = 0.80),        # Lower equivalence margin
+  list_uequi.tol = list("EMA" = 1.25),        # Upper equivalence margin
+  nsim = 1000                                 # Number of stochastic simulations
+))
+
+
+# Sample size calculation for Cmax
+(sim_Cmax <- sampleSize(
+  power = 0.9,                                # Target power
+  alpha = 0.05,                               # Significance level
+  arm_names = c("SB2", "EU_Remicade"),        # Names of trial arms
+  list_comparator = list("EMA" = c("SB2", "EU_Remicade")),  # Comparator configuration
+  mu_list = list("SB2" = 127.0, "EU_Remicade" = 126.2),     # Mean values
+  sigma_list = list("SB2" = 16.9, "EU_Remicade" = 17.9),    # Standard deviation values
+  list_lequi.tol = list("EMA" = 0.80),        # Lower equivalence margin
+  list_uequi.tol = list("EMA" = 1.25),        # Upper equivalence margin
+  nsim = 1000                                 # Number of stochastic simulations
+))
+```
+
+When testing each PK measure independently, the total sample size is `r sim_AUCinf$response$n_total` for AUCinf, `r sim_AUClast$response$n_total` for AUClast, and `r sim_Cmax$response$n_total` for Cmax. This means that we would have to enroll `r sim_AUCinf$response$n_total` + `r sim_AUClast$response$n_total` + `r sim_Cmax$response$n_total` = `r sim_AUCinf$response$n_total + sim_AUClast$response$n_total + sim_Cmax$response$n_total` patients in order to reject $H_0$. Note that the significance level of this combined test is then $0.05^3$. For context, the original trial was a randomized, single-blind, three-arm, parallel-group study conducted in 159 healthy subjects, slightly more than the `r sim_AUCinf$response$n_total + sim_AUClast$response$n_total + sim_Cmax$response$n_total` patients estimated to be necessary.
+
+## Simultaneous Testing of Independent Co-Primary Endpoints
+This approach focuses on simultaneous testing of PK measures while assuming independence between endpoints. Unlike the previous approach, which tested each PK measure independently, this approach integrates comparisons across multiple endpoints while directly controlling the overall Type I error rate at a pre-specified level.
+
+
+The arithmetic means and standard deviations for each endpoint and treatment arm are defined as follows:
+```{r}
+mu_list <- list(
+  SB2 = c(AUCinf = 38703, AUClast = 36862, Cmax = 127.0),
+  EUREF = c(AUCinf = 39360, AUClast = 37022, Cmax = 126.2)
+)
+
+sigma_list <- list(
+  SB2 = c(AUCinf = 11114, AUClast = 9133, Cmax = 16.9),
+  EUREF = c(AUCinf = 12332, AUClast = 9398, Cmax = 17.9)
+)
+```
+
+Subsequently, we define the equivalence boundaries: 
+
+```{r}
+list_comparator <- list("EMA" = c("SB2", "EUREF"))
+list_lequi.tol <- list("EMA" = c(AUCinf = 0.8, AUClast = 0.8, Cmax = 0.8))
+list_uequi.tol <- list("EMA" = c(AUCinf = 1.25, AUClast = 1.25, Cmax = 1.25))
+```
+
+Sample size calculation can then be implemented as follows:
+
+```{r}
+(N_ss <- sampleSize(power = 0.9, # target power
+                    alpha = 0.05,
+                    mu_list = mu_list,
+                    sigma_list = sigma_list,
+                    list_comparator = list_comparator,
+                    list_lequi.tol = list_lequi.tol,
+                    list_uequi.tol = list_uequi.tol,
+                    dtype = "parallel",
+                    ctype = "ROM",
+                    vareq = TRUE,
+                    lognorm = TRUE,
+                    nsim = 1000,
+                    seed = 1234))
+```
+
+We can inspect the sample size requirements in more detail as follows:
+
+```{r}
+N_ss$response
+```
+
+## Simultaneous Testing of Correlated Co-Primary Endpoints
+
+Incorporating the correlations between endpoints in sample size calculations for continuous-valued co-primary endpoints offers significant advantages [@sozu_sample_2015]. Adding more endpoints typically reduces power if such correlations are not accounted for. However, by including positive correlations in the calculations, power can be increased, and the required sample sizes may consequently be reduced.
+
+For this scenario, we proceed with the same values used previously but now assume that a correlation exists between endpoints. Specifically, we set $\rho = 0.6$, assuming a common correlation across all endpoints.
+
+If correlations differ between endpoints, they can be specified individually using a correlation matrix (`cor_mat`), allowing for greater flexibility in the analysis.
+
+```{r}
+(N_mult_corr <- sampleSize(power = 0.9, # target power
+                           alpha = 0.05,
+                           mu_list = mu_list,
+                           sigma_list = sigma_list,
+                           list_comparator = list_comparator,
+                           list_lequi.tol = list_lequi.tol,
+                           list_uequi.tol = list_uequi.tol,
+                           rho = 0.6,
+                           dtype = "parallel",
+                           ctype = "ROM",
+                           vareq = TRUE,
+                           lognorm = TRUE,
+                           nsim = 1000,
+                           seed = 1234))
+```
+
+The required total sample size for this example is `r N_mult_corr$response$n_total`. This is `r N_ss$response$n_total - N_mult_corr$response$n_total` fewer patients than the scenario in which endpoints are assumed to be uncorrelated.
+
+# Testing multiple primary endpoints {#multiple-primary}
+## Simultaneous Testing of Primary Endpoints
+Imagine that we are interested in demonstrating equivalence for at least $k$ primary endpoints. Unlike the previous scenarios, in which equivalence was required for all endpoints, this scenario requires an adjustment for multiplicity to control the family-wise error rate. For example, when $k=1$, we can use the Bonferroni correction:
+
+```{r}
+(N_mp_bon <- sampleSize(
+  power = 0.9,               # Target power
+  alpha = 0.05,              # Significance level
+  mu_list = mu_list,         # List of means
+  sigma_list = sigma_list,   # List of standard deviations
+  list_comparator = list_comparator,  # Comparator configurations
+  list_lequi.tol = list_lequi.tol,    # Lower equivalence boundaries
+  list_uequi.tol = list_uequi.tol,    # Upper equivalence boundaries
+  rho = 0.6,                 # Correlation between endpoints
+  dtype = "parallel",        # Trial design type
+  ctype = "ROM",             # Test type (Ratio of Means)
+  vareq = TRUE,              # Assume equal variances
+  lognorm = TRUE,            # Log-normal distribution assumption
+  k = c("EMA" = 1),          # Demonstrate equivalence for at least 1 endpoint
+  adjust = "bon",            # Bonferroni adjustment method
+  nsim = 1000,               # Number of stochastic simulations
+  seed = 1234                # Random seed for reproducibility
+))
+```
+As mentioned in [the Introduction](../articles/intropkg.html), Bonferroni adjustment is often overly conservative, especially in scenarios with correlated tests. A less restrictive alternative is the Sidak correction, which accounts for the joint probability of all tests being non-significant, making it mathematically less conservative than the Bonferroni method. 
+
+```{r}
+(N_mp_sid <- sampleSize(
+  power = 0.9,               # Target power
+  alpha = 0.05,              # Significance level
+  mu_list = mu_list,         # List of means
+  sigma_list = sigma_list,   # List of standard deviations
+  list_comparator = list_comparator,  # Comparator configurations
+  list_lequi.tol = list_lequi.tol,    # Lower equivalence boundaries
+  list_uequi.tol = list_uequi.tol,    # Upper equivalence boundaries
+  rho = 0.6,                 # Correlation between endpoints
+  dtype = "parallel",        # Trial design type
+  ctype = "ROM",             # Test type (Ratio of Means)
+  vareq = TRUE,              # Assume equal variances
+  lognorm = TRUE,            # Log-normal distribution assumption
+  k = c("EMA" = 1),          # Demonstrate equivalence for at least 1 endpoint
+  adjust = "sid",            # Sidak adjustment method
+  nsim = 1000,               # Number of stochastic simulations
+  seed = 1234                # Random seed for reproducibility
+))
+```
+
+When $k>1$, Bonferroni and Sidak correction methods become increasingly conservative. A more flexible approach is the *k*-adjustment, which specifically accounts for the number of tests and the number of endpoints required for equivalence.
+
+```{r}
+(N_mp_k <- sampleSize(
+  power = 0.9,               # Target power
+  alpha = 0.05,              # Significance level
+  mu_list = mu_list,         # List of means
+  sigma_list = sigma_list,   # List of standard deviations
+  list_comparator = list_comparator,  # Comparator configurations
+  list_lequi.tol = list_lequi.tol,    # Lower equivalence boundaries
+  list_uequi.tol = list_uequi.tol,    # Upper equivalence boundaries
+  rho = 0.6,                 # Correlation between endpoints
+  dtype = "parallel",        # Trial design type
+  ctype = "ROM",             # Test type (Ratio of Means)
+  vareq = TRUE,              # Assume equal variances
+  lognorm = TRUE,            # Log-normal distribution assumption
+  k = c("EMA" = 2),          # Demonstrate equivalence for at least 2 endpoints
+  adjust = "k",              # Adjustment method
+  nsim = 1000,               # Number of stochastic simulations
+  seed = 1234                # Random seed for reproducibility
+))
+```
+
+## Hierarchical Testing of Endpoints {#hierarchical-testing}
+Hierarchical testing is a structured approach that allows for a more nuanced evaluation of endpoints. Unlike a simple setup where at least $k$ endpoints must pass, hierarchical testing enforces that some endpoints are more critical and must always pass before proceeding to secondary endpoints. This ensures that primary endpoints receive higher priority, while still allowing flexibility in the evaluation of secondary endpoints.
+
+In this example, the trial follows a hierarchical testing strategy, with Cmax as the primary endpoint. Equivalence testing begins with Cmax; if established, the analysis proceeds to the secondary endpoints AUCinf and AUClast. The trial is considered successful if equivalence holds for Cmax and at least one ($k \geq 1$) of the secondary endpoints.
+
+To implement this advanced hierarchical testing approach in SimTOST, we:
+
+1. Use hierarchical testing by setting `adjust = "seq"`.
+2. Define the endpoint hierarchy using the `type_y` argument:
+   - Primary endpoint: `Cmax` (coded as 1) is the most critical endpoint and must always pass.
+   - Secondary endpoints: `AUCinf` and `AUClast` (coded as 2) are less critical and only evaluated if `Cmax` passes.
+3. Set `k=1`, ensuring that at least one of the two secondary endpoints (`AUCinf` or `AUClast`) must pass for the trial to be considered successful.
+
+The following code demonstrates how to apply hierarchical testing in SimTOST
+
+```{r}
+(N_mp_seq <- sampleSize(
+  power           = 0.9,                              # Target power
+  alpha           = 0.05,                             # Significance level
+  mu_list         = mu_list,                          # List of means
+  sigma_list      = sigma_list,                       # List of standard deviations
+  list_comparator = list_comparator,                  # Comparator configurations
+  list_lequi.tol  = list_lequi.tol,                   # Lower equivalence boundaries
+  list_uequi.tol  = list_uequi.tol,                   # Upper equivalence boundaries
+  rho             = 0.6,                              # Correlation between endpoints
+  dtype           = "parallel",                       # Trial design type
+  ctype           = "ROM",                            # Test type (Ratio of Means)
+  vareq           = TRUE,                             # Assume equal variances
+  lognorm         = TRUE,                             # Log-normal distribution assumption
+  adjust          = "seq",                            # Sequential adjustment method
+  type_y          = c("AUCinf" = 2, "AUClast" = 2, "Cmax" = 1), # Endpoint types
+  k               = c("EMA" = 1),                     # Demonstrate equivalence for all 3 endpoints
+  nsim            = 1000,                             # Number of stochastic simulations
+  seed            = 1234                              # Random seed for reproducibility
+))
+```
+
+The hierarchical testing strategy ensured that Cmax, the primary endpoint, had to pass before testing proceeded to the secondary endpoints AUCinf and AUClast. If Cmax failed, the trial was considered unsuccessful without evaluating the secondary endpoints. However, if Cmax passed, at least one of the two secondary endpoints had to demonstrate equivalence for the trial to be considered successful.
+
+In this particular study design, a total of `r N_mp_seq$response$n_total` patients were required to achieve an overall power of 90%. Previously, `r N_mp_k$response$n_total` patients were sufficient to demonstrate equivalence for at least two endpoints without enforcing a hierarchical structure. The increase in sample size by `r N_mp_seq$response$n_total - N_mp_k$response$n_total` additional patients was necessary to ensure equivalence for Cmax, the designated primary endpoint. This highlights the impact of hierarchical testing, where primary endpoints must be adequately powered before secondary endpoints are considered.
+
+
+
+# References

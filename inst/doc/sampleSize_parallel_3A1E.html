@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Bioequivalence Tests for Parallel Trial Designs: 3 Arms, 1 Endpoint</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Bioequivalence Tests for Parallel Trial
+Designs: 3 Arms, 1 Endpoint</h1>
+
+
+
+<p>In the <code>SimTOST</code> R package, which is specifically designed
+for sample size estimation for bioequivalence studies, hypothesis
+testing is based on the Two One-Sided Tests (TOST) procedure. <span class="citation">(<a href="#ref-sozu_sample_2015">Sozu et al.
+2015</a>)</span> In TOST, the equivalence test is framed as a comparison
+between the the null hypothesis of ‘new product is worse by a clinically
+relevant quantity’ and the alternative hypothesis of ‘difference between
+products is too small to be clinically relevant’. This vignette focuses
+on a parallel design, with 3 arms/treatments and 1 primary endpoint.</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This vignette demonstrates advanced sample size calculation
+techniques for parallel trial designs involving three arms and one
+endpoint. Specifically, we calculate the required sample size to test
+bioequivalence between a new treatment (SB2) and a reference product
+(Remicade) administered in two different locations (“EU_Remicade” and
+“USA_Remicade”). The endpoint of interest is the Area Under the Curve
+(AUCinf), a commonly used pharmacokinetic measure.</p>
+<p>In this example, we assume the endpoint follows a log-normal
+distribution with equal variances across arms. The goal is to determine
+the sample size needed to achieve 90% power while controlling the type I
+error rate at 5%. The equivalence margin is defined as <span class="math inline">\(E_L = 80\%\)</span> and <span class="math inline">\(E_U = 125\%\)</span> of the reference mean on the
+original scale.</p>
+<p>The methods presented in this vignette build on fundamental
+bioequivalence testing concepts and extend them to multi-arm scenarios.
+These examples provide practical insights for designing robust parallel
+trials with complex equivalence testing requirements.</p>
+<p>We assume that the primary endpoint, AUCinf, is on the original
+scale, with the mean and standard deviation for each arm available. This
+information is organized into a structured data table for further
+analysis:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(SimTOST)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>data <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">data.table</span>(<span class="at">arm =</span> <span class="fu">c</span>(<span class="st">&quot;SB2&quot;</span>,<span class="st">&quot;RemEU&quot;</span>,<span class="st">&quot;RemUSA&quot;</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>                               <span class="at">mean =</span> <span class="fu">c</span>(<span class="fl">37162.0</span>, <span class="fl">37705.0</span>, <span class="fl">37702.8</span>), </span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>                               <span class="at">sd =</span> <span class="fu">c</span>(<span class="fl">11113.62172</span>, <span class="fl">12332.41615</span>,<span class="fl">12113.72</span>))</span></code></pre></div>
+</div>
+<div id="sample-size-calculation-for-aucinf-equivalence-to-eu-remicade" class="section level1">
+<h1>Sample Size Calculation for AUCinf: Equivalence to EU Remicade</h1>
+<p>This example demonstrates how to calculate the required sample size
+when testing the equivalence of SB2 to a reference drug, Remicade, as
+administered in the EU. The goal is to determine the minimum number of
+participants needed to ensure adequate power for the equivalence
+test.</p>
+<div id="hypotheses" class="section level2">
+<h2>Hypotheses</h2>
+<p>Null Hypothesis (No Equivalence): <span class="math display">\[H_0:
+\frac{\mu_{SB2}}{\mu_{RemEU}} \le E_L ~~ or~~
+\frac{\mu_{SB2}}{\mu_{RemEU}} \ge E_U\]</span></p>
+<p>Alternative Hypothesis (Equivalence):</p>
+<p><span class="math display">\[H_1:
+E_L&lt;\frac{\mu_{SB2}}{\mu_{RemEU}} &lt; E_U\]</span></p>
+<p>Here, <span class="math inline">\(E_L\)</span> and <span class="math inline">\(E_U\)</span> represent the lower and upper
+equivalence margins, respectively.</p>
+</div>
+<div id="preparing-the-function-arguments" class="section level2">
+<h2>Preparing the function arguments</h2>
+<p>To proceed with the sample size calculation, we first need to
+organize the mean and standard deviation values of each arm (SB2, EU
+Remicade, USA Remicade) as list objects.</p>
+<p>Since this example focuses on a single endpoint, the mean list
+(<code>mu_list</code>) contains three scalar elements corresponding to
+each arm, and the standard deviation list (<code>sigma_list</code>)
+contains three 1x1 matrix elements.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>mu_list <span class="ot">&lt;-</span> <span class="fu">as.list</span>(data<span class="sc">$</span>mean)  <span class="co"># Organize mean values into a list</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>sigma_list <span class="ot">&lt;-</span> <span class="fu">as.list</span>(data<span class="sc">$</span>sd)  <span class="co"># Organize standard deviation values into a list</span></span></code></pre></div>
+<p>Next, we define the comparison parameters, including the lower
+(<code>lequi.tol</code>) and upper (<code>uequi.tol</code>) equivalence
+boundaries, as well as the list of comparators. Since we are only
+comparing two arms (SB2 and EU Remicade), the list of comparators
+contains a single element specifying these two arms:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>list_comparator <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;Comparison&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;SB2&quot;</span>,<span class="st">&quot;RemEU&quot;</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>list_lequi.tol <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;Comparison&quot;</span> <span class="ot">=</span> <span class="fl">0.8</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>list_uequi.tol <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;Comparison&quot;</span> <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span><span class="fl">0.8</span>)</span></code></pre></div>
+</div>
+<div id="computing-sample-size" class="section level2">
+<h2>Computing Sample Size</h2>
+<p>Finally, we use the <a href="../reference/sampleSize.html">sampleSize()</a> function to
+calculate the required sample size based on stochastic simulations of
+the trial. The function accepts several parameters, such as the desired
+power, confidence level, and design specifications. By default, it
+assumes:</p>
+<ul>
+<li>A parallel design,</li>
+<li>A test based on the ratio of means (ROM),</li>
+<li>Equal variances across arms,</li>
+<li>A lognormal distribution for the endpoint.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>AUCinf_1comp <span class="ot">&lt;-</span> <span class="fu">sampleSize</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">power =</span> <span class="fl">0.9</span>,                  <span class="co"># Target power</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.05</span>,                 <span class="co"># Confidence level</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">arm_names =</span> data<span class="sc">$</span>arm,         <span class="co"># Names of trial arms</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="at">list_comparator =</span> list_comparator,  <span class="co"># Comparator configuration</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="at">mu_list =</span> mu_list,            <span class="co"># Mean values</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="at">sigma_list =</span> sigma_list,      <span class="co"># Standard deviation values</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="at">list_lequi.tol =</span> list_lequi.tol,   <span class="co"># Lower equivalence boundary</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="at">list_uequi.tol =</span> list_uequi.tol,   <span class="co"># Upper equivalence boundary</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="at">nsim =</span> <span class="dv">1000</span>                   <span class="co"># Number of stochastic simulations</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>AUCinf_1comp</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; Sample Size Calculation Results</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; Study Design: parallel trial targeting 90% power with a 5% type-I error.</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; Comparisons:</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. RemEU </span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: y1 </span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt;                  Parameter     Value</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt;          Total Sample Size        84</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt;             Achieved Power      90.3</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt;  Power Confidence Interval 88.3 - 92</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span></code></pre></div>
+<p>The required sample size for this scenario is 84, or 42 for each
+arm.</p>
+</div>
+</div>
+<div id="sample-size-calculation-for-aucinf-equivalence-to-us-remicade-and-eu-remicade" class="section level1">
+<h1>Sample Size Calculation for AUCinf: Equivalence to US Remicade and
+EU Remicade</h1>
+<p>In this section, we calculate the sample size required to demonstrate
+equivalence with both the European reference product (RemEU) and the US
+reference product (RemUS). This scenario involves a more complex
+comparison, as we must simultaneously establish equivalence with two
+distinct reference arms.</p>
+<div id="hypotheses-1" class="section level2">
+<h2>Hypotheses</h2>
+<p>Null Hypothesis (No Equivalence):</p>
+<p><span class="math display">\[H_0: \frac{\mu_{SB2}}{\mu_{RemEU}} \le
+E_L ~~ or~~ \frac{\mu_{SB2}}{\mu_{RemEU}} \ge E_U~~ or~~
+\frac{\mu_{SB2}}{\mu_{RemUSA}} \le E_L ~~ or~~
+\frac{\mu_{SB2}}{\mu_{RemUSA}} \ge E_U\]</span></p>
+<p>Alternative Hypothesis (Equivalence):</p>
+<p><span class="math display">\[H_1:
+E_L&lt;\frac{\mu_{SB2}}{\mu_{RemEU}} &lt; E_U~~
+and~~E_L&lt;\frac{\mu_{SB2}}{\mu_{RemUSA}} &lt; E_U\]</span> <strong>Key
+Considerations</strong></p>
+<ul>
+<li>The function <a href="../reference/sampleSize.html">sampleSize()</a>
+adjusts the alpha level for multiple comparisons within a single
+comparator (e.g., comparisons involving only RemEU or RemUSA).</li>
+<li>The function does not yet account for alpha adjustments between
+comparators when simultaneously comparing SB2 with both reference
+products (RemEU and RemUSA). Thus, the null hypothesis is rejected if
+any ROM falls outside the equivalence boundaries. Future package updates
+will address this limitation and include proper alpha adjustments for
+comparisons between comparators.</li>
+</ul>
+</div>
+<div id="implementation-details" class="section level2">
+<h2>Implementation Details</h2>
+<p>Implementation of this scenario is similar to the initial example, in
+which the <code>list_comparator</code> is modified to include multiple
+comparators. The list contains two elements specifying the simultaneous
+comparison between SB2 vs. RemEU and SB2 vs. RemUSA. This approach
+ensures that the equivalence assessment accounts for both reference
+products.</p>
+<p>Additionally, we must specify equivalence boundaries for each
+comparison individually. These boundaries define the acceptable range
+for equivalence and are provided separately for each comparator.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>list_comparator <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;EMA&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;SB2&quot;</span>, <span class="st">&quot;RemEU&quot;</span>),</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                        <span class="st">&quot;FDA&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;SB2&quot;</span>, <span class="st">&quot;RemUSA&quot;</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>list_lequi.tol <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;EMA&quot;</span> <span class="ot">=</span> <span class="fl">0.8</span>, <span class="st">&quot;FDA&quot;</span> <span class="ot">=</span> <span class="fl">0.8</span>)     <span class="co"># Lower equivalence boundary</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>list_uequi.tol <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;EMA&quot;</span> <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span><span class="fl">0.8</span>, <span class="st">&quot;FDA&quot;</span> <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span><span class="fl">0.8</span>) <span class="co"># Upper equivalence boundary</span></span></code></pre></div>
+</div>
+<div id="computing-sample-size-1" class="section level2">
+<h2>Computing Sample Size</h2>
+<p>We then pass these values into the <a href="../reference/sampleSize.html">sampleSize()</a> function to
+calculate the required sample size for multiple comparisons.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>(AUCinf_2comp <span class="ot">&lt;-</span> <span class="fu">sampleSize</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">power =</span> <span class="fl">0.9</span>,                  <span class="co"># Target power</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.05</span>,                 <span class="co"># Confidence level</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">arm_names =</span> data<span class="sc">$</span>arm,         <span class="co"># Names of trial arms</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">list_comparator =</span> list_comparator,  <span class="co"># Comparator configuration</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">mu_list =</span> mu_list,            <span class="co"># Mean values</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">sigma_list =</span> sigma_list,      <span class="co"># Standard deviation values</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="at">list_lequi.tol =</span> list_lequi.tol,   <span class="co"># Lower equivalence boundary</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="at">list_uequi.tol =</span> list_uequi.tol,   <span class="co"># Upper equivalence boundary</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="at">nsim =</span> <span class="dv">1000</span>                   <span class="co"># Number of stochastic simulations</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>))</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; Sample Size Calculation Results</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; Study Design: parallel trial targeting 90% power with a 5% type-I error.</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; Comparisons:</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. RemEU </span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: y1 </span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;    SB2 vs. RemUSA </span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt;     - Endpoints Tested: y1 </span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt;                  Parameter     Value</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt;          Total Sample Size       150</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt;             Achieved Power        91</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt;  Power Confidence Interval 89 - 92.7</span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt; -------------------------------------------------------------</span></span></code></pre></div>
+</div>
+<div id="results-and-interpretation" class="section level2">
+<h2>Results and Interpretation</h2>
+<p>The required total sample size for this scenario is 150. Notably, an
+additional 8 patients per arm are required to achieve equivalence with
+both reference products (RemEU and RemUSA), compared to the scenario
+where equivalence is required with only one reference arm (42).</p>
+<p>This example demonstrates the added complexity and sample size
+requirements when multiple comparators are involved in an equivalence
+trial.</p>
+<p>The SimTOST package includes the <a href="../reference/plot.simss.html">plot()</a> function, which is
+designed to permit visualization of the relationship between sample size
+(x-axis) and achieved power (y-axis) for all combinations of endpoints
+and comparators. In this example, we use the <a href="../reference/plot.simss.html">plot()</a> function to generate a
+plot for the <code>AUCinf_2comp</code> object.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">plot</span>(AUCinf_2comp)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" width="95%" /></p>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-sozu_sample_2015" class="csl-entry">
+Sozu, Takashi, Tomoyuki Sugimoto, Toshimitsu Hamasaki, and Scott R.
+Evans. 2015. <em>Sample <span>Size Determination</span> in
+<span>Clinical Trials</span> with <span>Multiple Endpoints</span></em>.
+<span>SpringerBriefs</span> in <span>Statistics</span>. Cham: Springer
+International Publishing. <a href="https://doi.org/10.1007/978-3-319-22005-5">https://doi.org/10.1007/978-3-319-22005-5</a>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
