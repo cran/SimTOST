@@ -1,6 +1,6 @@
-76e19be687ebf7d69f89000562583fda *DESCRIPTION
+53d6f06f50161591980665ff3b2786ed *DESCRIPTION
 5a59a692fd3331385405b2f49a4b1093 *NAMESPACE
-28b5582e245e50df59a6c3a5eec047b1 *NEWS.md
+8abf25eab393cd42036716a328201110 *NEWS.md
 06777ecd4f4d1d8b162dc08d3705f049 *R/RcppExports.R
 e4997672741b99bf9479a63d128e5003 *R/SampleSize.R
 073d889387a06069f7f4b9b18462e87f *R/SimTOST-package.R
@@ -68,8 +68,8 @@ a6db127f00d189bb0f01d634f2d99cb5 *man/uniroot.integer.mod.Rd
 11588f1d87c24c4c51bc6cdab1544adc *man/validate_sample_size_limits.Rd
 2a6f9e9e044a78154d3cfda5936d6f48 *src/Makevars
 2a6f9e9e044a78154d3cfda5936d6f48 *src/Makevars.win
-fa131f6a60463506cf5a1baadebaa143 *src/RcppExports.cpp
-2278c496dea8e933aec1066ceb16252b *src/module.cpp
+5efd0db598604a57c597bd7484018749 *src/RcppExports.cpp
+5f4b264364c07b3cd447c474c09cbb12 *src/module.cpp
 ef75879f092736de4ba879ae99d46f69 *tests/testthat.R
 7ca18f47a089739788878a393eb23695 *tests/testthat/test-check_equivalence.R
 cb3e7057d22c4b965febddc4a43ee588 *tests/testthat/test-derive_varcov_list.R

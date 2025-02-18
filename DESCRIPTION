@@ -1,7 +1,7 @@
 Package: SimTOST
 Title: Sample Size Estimation for Bio-Equivalence Trials Through
         Simulation
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(
     person(given = "Thomas", 
            family = "Debray", 
@@ -52,7 +52,7 @@ Config/testthat/edition: 3
 LinkingTo: Rcpp, RcppArmadillo
 URL: https://smartdata-analysis-and-statistics.github.io/SimTOST/
 NeedsCompilation: yes
-Packaged: 2025-02-17 11:37:16 UTC; Thomas
+Packaged: 2025-02-18 16:16:14 UTC; Thomas
 Author: Thomas Debray [aut, cre] (<https://orcid.org/0000-0002-1790-2719>),
   Johanna Munoz [aut],
   Dewi Amaliah [ctb],
@@ -62,4 +62,4 @@ Author: Thomas Debray [aut, cre] (<https://orcid.org/0000-0002-1790-2719>),
   Biogen Inc [cph, fnd]
 Maintainer: Thomas Debray <tdebray@fromdatatowisdom.com>
 Repository: CRAN
-Date/Publication: 2025-02-18 10:10:14 UTC
+Date/Publication: 2025-02-18 23:40:08 UTC
